@@ -101,8 +101,6 @@ await fetch('./input.json')
     var buttons = document.getElementById("buttons").getElementsByClassName("btn");
     buttons = [...buttons];
     buttons[0].classList.add('selected');
-    console.log(buttons);
-
 
     //buttons for each on click function to create new wheel from data
     buttons.forEach(function (element) {
@@ -139,10 +137,53 @@ await fetch('./input.json')
 
             // create wheel
             addWheel(data);
+            if(input.value==""){
+                nspins=data.length;
+                console.log(nspins);
+            }
+            if(data.length==0){
+                document.getElementById("chart").style.opacity = 0;
+            }
+            else{
+                document.getElementById("chart").style.opacity = 1;
+            }
         });
     }); 
 
 
+    d3.select("#reset").on("click", function() {
+        console.log("reset");
+        listElement.empty();
+        brew = [];
+        oldpick = [];
+        datadict=[];
+        input.value="";
+        nspins=data.length;
+        data= json[keys[0]]
+        for (var i = 0; i < data.length; i++) {
+            datadict.push({"label": data[i], "value": i});
+        }
+        data=datadict;  
+        addWheel(data);
+        buttons[0].classList.add('selected');
+        for (var i = 1; i < buttons.length; i++) {
+            buttons[i].classList.remove('selected');
+        }
+        document.getElementById("soup").remove();
+        // on spin click request full screen
+        spinner.on("click", function() {
+            scaleSpinner();
+            spin();
+        });
+    });
+
+    var spinimage = document.getElementById("spinimage");
+
+    // on spin click request full screen
+    spinner.on("click", function() {
+        scaleSpinner();
+        spin();
+    });
 
     
     //function to draw the wheel
@@ -211,17 +252,14 @@ await fetch('./input.json')
             .attr("x", -38)
             .attr("y", -35)
             .attr("id", "spinimage");
-
-       
-        // on spin click request full screen
-        spinner.on("click", function() {
-            scaleSpinner();
-            spin();
-        });
-
+        scaleSpinner();
     } // end addWheel()
 
-
+    var nspins=data.length;
+    input=document.getElementById("nspins");
+    input.addEventListener("change", function() {
+        nspins=input.value;
+    });
 
     // This function is called when the wheel is spun
     function spin(){
@@ -229,9 +267,13 @@ await fetch('./input.json')
         spinner.on("click", null);
         // If all slices have been seen, log "done" and remove click handlers
         console.log("OldPick: " + oldpick.length, "Data length: " + data.length);
-        if(oldpick.length == data.length){
+        if(oldpick.length == nspins){
             console.log("done");
             spinner.on("click", null);
+            finalh3 = document.createElement("p");
+            finalh3.innerHTML = "Soup brewed! Happy cooking!";
+            finalh3.setAttribute("id", "soup");
+            document.getElementById("right").appendChild(finalh3);
             return;
         }
 
@@ -276,9 +318,8 @@ await fetch('./input.json')
             
                 // Re-enable the spin on click
                 spinner.on("click", function() {
-                    scaleSpinner()
+                    scaleSpinner();
                     spin();
-
                 });
         });
     }
@@ -288,39 +329,37 @@ await fetch('./input.json')
 
         
         
-        function rotTween(to) {
-          var i = d3.interpolate(oldrotation % 360, rotation);
-          return function(t) {
-            return "rotate(" + i(t) + ")";
-          };
-        }
-        
-        
-        function getRandomNumbers(){
-            var array = new Uint16Array(1000);
-            var scale = d3.scale.linear().range([360, 1440]).domain([0, 100000]);
-            if(window.hasOwnProperty("crypto") && typeof window.crypto.getRandomValues === "function"){
-                window.crypto.getRandomValues(array);
-                console.log("works");
-            } else {
-                //no support for crypto, get crappy random numbers
-                for(var i=0; i < 1000; i++){
-                    array[i] = Math.floor(Math.random() * 100000) + 1;
-                }
+    function rotTween(to) {
+        var i = d3.interpolate(oldrotation % 360, rotation);
+        return function(t) {
+        return "rotate(" + i(t) + ")";
+        };
+    }
+    
+    
+    function getRandomNumbers(){
+        var array = new Uint16Array(1000);
+        var scale = d3.scale.linear().range([360, 1440]).domain([0, 100000]);
+        if(window.hasOwnProperty("crypto") && typeof window.crypto.getRandomValues === "function"){
+            window.crypto.getRandomValues(array);
+            console.log("works");
+        } else {
+            //no support for crypto, get crappy random numbers
+            for(var i=0; i < 1000; i++){
+                array[i] = Math.floor(Math.random() * 100000) + 1;
             }
-            return array;
         }
-
-
-
-
+        return array;
+    }
 
 
     function scaleSpinner() {
-        var spinimage = document.getElementById("spinimage");
+        spinimage = document.getElementById("spinimage");
+        console.log(spinimage.style.animation)
         spinimage.style.animation = "scaleAnimation 1s";
         setTimeout(function(){ spinimage.style.animation = "none"; }, 1000); // Reset the animation property
     }
+
 
 
 

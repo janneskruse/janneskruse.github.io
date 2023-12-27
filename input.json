@@ -4,13 +4,24 @@
         "burger",
         "sushi",
         "pasta",
-        "salad"
+        "salad",
+        "sandwich",
+        "taco",
+        "burrito",
+        "hot dog",
+        "chicken nuggets",
+        "chicken wings"
     ],
     "challenge": [
-        "coke",
-        "sprite",
-        "fanta",
-        "water",
-        "beer"
+        "kiss a stranger",
+        "eat a bug",
+        "do a handstand",
+        "do a cartwheel",
+        "do a backflip",
+        "do a frontflip",
+        "do a somersault",
+        "do a split",
+        "do a pushup",
+        "do a pullup"
     ]
 }
