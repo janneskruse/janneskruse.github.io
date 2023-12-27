@@ -102,6 +102,28 @@ p{
     box-sizing: border-box;
     padding: 0px; 
 }
+
+@media only screen and (max-width: 800px){
+    #miraculix{
+        flex-direction: column;
+    }
+    #left{
+        width: 100% !important;
+        height: 50%;
+        padding-left: 0px;
+    }
+    #right{
+        margin-top: 10px;
+        width: 100% !important;
+        height: 50%;
+        padding-left: 0px !important;
+    }
+    #chart{
+        transform: scale(0.6);
+    }
+}
+
+
 #right{
     width: 50%;
     height: 100%;
