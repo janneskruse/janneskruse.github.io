@@ -1,0 +1,16 @@
+{
+    "food": [
+        "pizza",
+        "burger",
+        "sushi",
+        "pasta",
+        "salad"
+    ],
+    "challenge": [
+        "coke",
+        "sprite",
+        "fanta",
+        "water",
+        "beer"
+    ]
+}
